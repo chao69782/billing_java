@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fq.modules.family.mapper.FamilyMapper">
+
+    <select id="members" resultType="com.fq.modules.family.vo.MemberListVO">
+        SELECT
+            f.id,
+            IFNULL( f.remark, su.nick_name ) nickName,
+            f.role,
+            f.user_id
+        FROM
+            family f
+                LEFT JOIN sys_user su ON su.id = f.user_id
+        WHERE
+            f.group_id = ( SELECT group_id FROM family WHERE user_id = #{userId} )
+        ORDER BY
+            f.role ASC
+    </select>
+
+    <select id="findGroupId" resultType="java.lang.Long">
+        SELECT
+            group_id
+        FROM
+            family
+        WHERE
+            user_id = #{userId}
+    </select>
+
+    <select id="countMember" resultType="java.lang.Long">
+        SELECT
+            COUNT( id )
+        FROM
+            family
+        WHERE
+            group_id = #{groupId}
+    </select>
+
+    <delete id="removeAllMember">
+        DELETE FROM family WHERE group_id = #{groupId}
+    </delete>
+
+    <delete id="removeByUserId">
+        DELETE FROM family WHERE user_id = #{userId}
+    </delete>
+
+</mapper>

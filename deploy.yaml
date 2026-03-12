@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: billing-deployment
+  name: billing-deployment
+  namespace: fq-cloud
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: billing-deployment
+  strategy: { }
+  template:
+    metadata:
+      labels:
+        app: billing-deployment
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: cn-beijing.172.31.42.178
+      imagePullSecrets:
+        - name: fq-image-account-secret
+      containers:
+        - name: billing
+          image: crpi-3ie139ak3gan2mof-vpc.cn-beijing.personal.cr.aliyuncs.com/shunluda/billing:1.0.0
+          imagePullPolicy: Always
+          livenessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 1211
+              scheme: HTTP
+            initialDelaySeconds: 60    # 根据应用启动时间调整
+            periodSeconds: 30          # 检查频率，避免过于频繁
+            timeoutSeconds: 10         # 超时时间应小于periodSeconds
+            failureThreshold: 3        # 连续失败3次才重启
+            successThreshold: 1        # 成功1次即认为健康
+          ports:
+            - containerPort: 1211
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: billing-deployment
+  name: billing-svc
+  namespace: fq-cloud
+spec:
+  ports:
+    - port: 1211
+      protocol: TCP
+      targetPort: 1211
+  selector:
+    app: billing-deployment
+  type: ClusterIP

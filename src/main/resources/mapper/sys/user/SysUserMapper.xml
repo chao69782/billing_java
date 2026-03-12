@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fq.modules.sys.user.mapper.SysUserMapper">
+
+    <select id="getAccountUser" resultType="com.fq.modules.sys.user.entity.SysUser">
+        SELECT su.id,
+               su.user_name,
+               su.nick_name,
+               su.real_name,
+               su.mobile,
+               su.avatar,
+               su.password,
+               su.state,
+               su.id_card,
+               su.gender,
+               su.birthday,
+               su.invite_code
+        FROM sys_user su
+        WHERE  su.account_type = #{accountType} AND (su.user_name = #{userName} OR su.mobile = #{userName})
+    </select>
+
+    <select id="getUserByInviteCode" resultType="com.fq.modules.sys.user.entity.SysUser">
+        SELECT id
+        FROM sys_user
+        WHERE invite_code = #{inviteCode}
+    </select>
+
+</mapper>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fq.modules.sys.role.mapper.SysUserRoleMapper">
+
+    <select id="findUserPermission" resultType="java.lang.String">
+        SELECT DISTINCT mu.permission_tag
+        FROM sys_user_role ur
+                 INNER JOIN sys_role_menu rm ON ur.role_id = rm.role_id
+                 INNER JOIN sys_menu mu ON rm.menu_id = mu.id
+        WHERE ur.user_id = #{userId}
+    </select>
+
+    <select id="userRole" resultType="com.fq.modules.sys.role.entity.SysRole">
+        SELECT sr.* FROM sys_user_role sur
+                             LEFT JOIN sys_role sr on sur.role_id = sr.id
+        WHERE sur.user_id = #{userId}
+    </select>
+
+    <select id="findAllPermission" resultType="java.lang.String">
+        SELECT
+            DISTINCT permission_tag
+        FROM
+            sys_menu
+    </select>
+</mapper>

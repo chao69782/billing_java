@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fq.modules.budget.mapper.BudgetMapper">
+
+    <select id="getBudget" resultType="com.fq.modules.budget.vo.BudgetVO">
+        SELECT
+            IFNULL(b.budget,0) totalBudget,
+            IFNULL(SUM(r.amount),0) monthExpense
+        FROM
+            budget b
+                LEFT JOIN record r ON r.user_id = b.user_id AND SUBSTRING( r.record_time, 1, 7 ) = b.month_str AND r.record_type = 1
+        WHERE
+            b.user_id = #{userId}
+          AND b.month_str = #{monthStr}
+    </select>
+</mapper>
