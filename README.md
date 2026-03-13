@@ -189,7 +189,7 @@ file:
   upload:
     path: /uploads
   web:
-    url: http://localhost:8080
+    url: /file/**
 ```
 
 ### 数据库初始化
