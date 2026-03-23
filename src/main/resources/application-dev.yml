@@ -1,0 +1,138 @@
+spring:
+  servlet:
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 100MB
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: Asia/Shanghai
+  datasource:
+    username: root
+    password: 123456
+    url: jdbc:mysql://localhost:3306/billing?useUnicode=true&characterEncoding=utf-8&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Shanghai
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    druid:
+      # 初始化大小
+      initial-size: 5
+      # 最小空闲连接数
+      min-idle: 5
+      # 最大活动连接数
+      max-active: 20
+      # 获取连接等待超时时间(毫秒)
+      max-wait: 60000
+      # 间隔多久才进行一次检测，检测需要关闭的空闲连接(毫秒)
+      time-between-eviction-runs-millis: 60000
+      # 一个连接在池中最小生存的时间(毫秒)
+      min-evictable-idle-time-millis: 300000
+      # 验证连接是否有效的SQL
+      validation-query: SELECT 1
+      # 建议配置为true，不影响性能，并且保证安全性
+      test-while-idle: true
+      # 申请连接时执行validationQuery检测连接是否有效
+      test-on-borrow: false
+      # 归还连接时执行validationQuery检测连接是否有效
+      test-on-return: false
+      # 开启Druid监控页面
+      stat-view-servlet:
+        enabled: true
+        url-pattern: /druid/*
+        # 监控页面登录用户名
+        login-username: admin
+        # 监控页面登录密码
+        login-password: 123456
+        # 允许访问的IP地址，不配置则允许所有
+        allow:
+        # 拒绝访问的IP地址
+        deny:
+
+      # 开启Web监控
+      web-stat-filter:
+        enabled: true
+        url-pattern: /*
+        # 排除监控的路径
+        exclusions: '*.js,*.gif,*.jpg,*.png,*.css,*.ico,/druid/*'
+
+      # SQL监控配置
+      filter:
+        stat:
+          enabled: true
+          # 慢SQL阈值（毫秒）
+          slow-sql-millis: 1000
+          # 记录慢SQL
+          log-slow-sql: true
+        wall:
+          enabled: true
+  # Redis配置
+  data:
+    redis:
+      # 数据库索引
+      database: 5
+      host: 127.0.0.1
+      port: 6379
+      password: 123456
+# springdoc-openapi 配置
+springdoc:
+  api-docs:
+    enabled: true
+    path: /v3/api-docs
+  swagger-ui:
+    enabled: true
+    path: /swagger-ui.html
+  group-configs:
+    - group: '管理端模块'
+      paths-to-match: '/api/admin/**'
+    - group: '用户端模块'
+      paths-to-match: '/api/front/**'
+    - group: '公共模块'
+      paths-to-match: '/api/common/**'
+# knife4j 配置
+knife4j:
+  enable: true
+  setting:
+    language: zh-CN
+
+jwt:
+  # 登录 token 过期时间（按秒计算）
+  expireTime: 604800
+  # 登录 token 解析秘钥
+  secret: Hq7MnWxTpLkRdYbVsCfGjUeZoIaPtNwA
+  # 是否T下线
+  kickOut: true
+# shiro 配置
+security:
+  anon:
+    - /api/admin/sys/user/login
+    - /api/admin/sys/user/encryptLogin
+    - /api/common/captcha/gen
+    - /api/front/user/login
+    # 文件
+    - /file/**
+    # api文档 界面
+    - /v3/**
+    - /doc.html
+    - /swagger-ui.html
+    - /webjars/**
+    # Druid
+    - /druid/**
+#加密key
+encrypt:
+  publicKey: MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAsFPkn0x3t+TK+uIjs7l99OeP3QpUnxc9g6fxpc+HXIJTwNaEKJ+5ReXmmwYpobfbugS4oU/iFXsc1nlJFBcXFU4EXo2cF9h6fqdbW4Inp6kpfi7WtFNtfoFOE7UCPnLq7Utb+TqXHEeaqJQoGNhypL7BNi+aFDYSrbiHc4BY3MJnzi1zgV2Dhn9U+qJKD8YPbZwf77026teb0GufMpklqXv47SKQKsSP7/AMXzXU4WX5BynBZLzZTEi7SpykrxKBpzRMBPoSwG3CLWiO8SOLw+jA5wnTs9vb73KDt812+PlNHpdEUGmykcjfuLNGwAZePYsIPhjCSpIqM+YdM80RKwIDAQAB
+  privateKey: MIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQCwU+SfTHe35Mr64iOzuX3054/dClSfFz2Dp/Glz4dcglPA1oQon7lF5eabBimht9u6BLihT+IVexzWeUkUFxcVTgRejZwX2Hp+p1tbgienqSl+Lta0U21+gU4TtQI+curtS1v5OpccR5qolCgY2HKkvsE2L5oUNhKtuIdzgFjcwmfOLXOBXYOGf1T6okoPxg9tnB/vvTbq15vQa58ymSWpe/jtIpAqxI/v8AxfNdThZfkHKcFkvNlMSLtKnKSvEoGnNEwE+hLAbcItaI7xI4vD6MDnCdOz29vvcoO3zXb4+U0el0RQabKRyN+4s0bABl49iwg+GMJKkioz5h0zzRErAgMBAAECggEABxTXca5YgIInxLugQ2+Hp3ZFSNNJYrpENi1gfxA+l3CEfJIg7KC9iBkbkc5FjcEcifP2lkPnCIXROqvUS4JB4xEnC8UUJ8EB6mQ+PwaTISCiEfc/mC5hj1sSD6iNVoS2+qC0KOY5e2FEzNBma9kFgahHii2POpCRX3ixt+nHp9X1v3kgacfpzQYMd7FMQYOiEMGjpITPtv89NkkeG07WCpscTJWu5FWf1FhziveNX2xV89O2ZoAsRQu+M11/UF9VyBuheHWdhCsijF9VNhJgciIf0LZoH6GV14pzoA+g1pfLsksoBO9167nO5qpv4demm/EoJFXvcEZmC+2rwVxWAQKBgQDAl38vydiK73v7DdCq8Qi6rIn+doeaTcBGSgh/VJz9BNi0Iul7HCz/WGOchzYOr2lfjK19RITEOs/LWS6asexysq6gCwjPpS9Uq/TsOIv9ustpAKjYxe2E5CInWs2WrvHQC67HgjFi+Qp0TUbGizbQlF5Oh31Mts2VOpIhCp11iwKBgQDqYZYnbAKtaR5wtco8BqD4gnYUbLclMQjrKfQ0ch/SIc1kuOlgVoR8K1z7knIfxzf91utR6qr5U5xqMadb5e/FFp8yMUcNPjIaS5QplmUfGsLkdoDNNiEpzdBxIMSm4bM6uxe6RItKnjeM1R4NaDY4fy3ia1Er1I/VVMi7q+aG4QKBgETor9hQd0tW3tx4F/Zh4caxH3rNvD0onqhHqvysMLOTPVpOt42WCj+ex51k/6GHf8NxWU3d60cu59SRZ0xwZvKvHi4jZJavOt0n3a17mhNB96/tTXyqbQ7EdbfxFGha1iijVXkLC1KnWuc8ExvNCeLdg1TDw8BkE/DWER0DaE17AoGALD0zLEm0z6pxtnB5tY7Cv2VQiFZk0z5IIqsOjv+jhfQfYo2Mb0SlSRKeQFXJ+LmPlfgE/rc+gkUH1vt8TVo/QYIdlkm60YMVzeTKGHdsqsxQUPMVKKa4570TROccdytOux0pQ11AtVrbvVdUjs9GvK80p/H9pjo+09Nm+BVgM8ECgYAEUxsawv5rr/dYW+G4NvondEldzQn++WY1rxrmkmwrh6ZU4fGqMzJZay5cfWdG85ahj7S+cM/Vk7Qouk6zWMzYJjA9HIf4L3/0lbFJf5Fm5Y6BRzo9SNefOhEVqwCcsAg9tutrDe8mrlzQkVZXx8IENVF0QTEe8Q5y3zWb3Og5Vw==
+
+file:
+  upload:
+    path: D:\data\upload\
+  web:
+    url: /file/**
+
+wechat:
+  wmp:
+    appId: appId
+    appSecret: appSecret
+
+langchain4j:
+  community:
+    dashscope:
+      chat-model:
+        model-name: qwen-max
+        api-key: YOUR-KEY

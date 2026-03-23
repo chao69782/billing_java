@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>3.5.3</version>
+        <relativePath/> <!-- lookup parent from repository -->
+    </parent>
+    <groupId>com.fq</groupId>
+    <artifactId>billing</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <name>billing</name>
+    <description>billing</description>
+    <properties>
+        <java.version>21</java.version>
+        <!-- MyBatis-Plus 版本 -->
+        <mybatis-plus.version>3.5.12</mybatis-plus.version>
+        <!-- Druid 连接池版本 -->
+        <druid.version>1.2.24</druid.version>
+        <!-- SpringDoc OpenAPI 版本 -->
+        <springdoc.version>2.7.0</springdoc.version>
+        <!-- Knife4j 版本 -->
+        <knife4j.version>4.4.0</knife4j.version>
+        <!-- Commons Lang3 版本 -->
+        <commons-lang3.version>3.12.0</commons-lang3.version>
+        <!-- JWT 版本 -->
+        <java-jwt.version>4.4.0</java-jwt.version>
+        <!-- HttpClient 版本 -->
+        <httpclient.version>4.5.13</httpclient.version>
+        <!-- FastJSON2 版本 -->
+        <fastjson2.version>2.0.61</fastjson2.version>
+        <!-- Hutool 版本 -->
+        <hutool.version>5.8.22</hutool.version>
+        <!-- dozer 版本 -->
+        <dozer.version>5.5.1</dozer.version>
+        <!-- JBCrypt 版本 -->
+        <jbcrypt.version>0.4</jbcrypt.version>
+        <!-- EasyExcel 版本 -->
+        <easyexcel.version>3.1.1</easyexcel.version>
+        <!-- EasyCaptcha 版本 -->
+        <easy-captcha.version>1.6.2</easy-captcha.version>
+        <!-- Lombok 版本 -->
+        <lombok.version>1.18.38</lombok.version>
+        <langchain4j-community.version>1.1.0-beta7</langchain4j-community.version>
+        <langchain4j-mcp.version>1.1.0-beta7</langchain4j-mcp.version>
+        <langchain4j-reactor.version>1.1.0-beta7</langchain4j-reactor.version>
+        <langchain4j.version>1.1.0</langchain4j.version>
+
+    </properties>
+    <dependencies>
+        <!-- Spring Boot Web 支持（包含 MVC、RESTful 等） -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <!--参数校验（JSR 303/Bean Validation）-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-validation</artifactId>
+        </dependency>
+        <!--Lombok（简化 Java 代码，自动生成 getter/setter 等）-->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>${lombok.version}</version>
+            <optional>true</optional>
+        </dependency>
+        <!--MySQL 数据库驱动-->
+        <dependency>
+            <groupId>com.mysql</groupId>
+            <artifactId>mysql-connector-j</artifactId>
+        </dependency>
+        <!--MyBatis-Plus 持久层框架（Spring Boot 3 版本）-->
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-spring-boot3-starter</artifactId>
+            <version>${mybatis-plus.version}</version>
+        </dependency>
+        <!--MyBatis-Plus 代码生成器-->
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-generator</artifactId>
+            <version>${mybatis-plus.version}</version>
+        </dependency>
+        <!--MyBatis-Plus JSQLParser 支持（用于数据权限等 SQL 解析）-->
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-jsqlparser</artifactId>
+            <version>${mybatis-plus.version}</version>
+        </dependency>
+        <!--Freemarker 模板引擎（MyBatis-Plus 代码生成器依赖）-->
+        <dependency>
+            <groupId>org.freemarker</groupId>
+            <artifactId>freemarker</artifactId>
+        </dependency>
+        <!--Druid 数据库连接池（Spring Boot 3 版本）-->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>druid-spring-boot-3-starter</artifactId>
+            <version>${druid.version}</version>
+        </dependency>
+        <!--SpringDoc OpenAPI 3 API 文档 UI-->
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+            <version>${springdoc.version}</version>
+        </dependency>
+
+        <!--Knife4j 增强版 API 文档（基于 OpenAPI 3）-->
+        <dependency>
+            <groupId>com.github.xiaoymin</groupId>
+            <artifactId>knife4j-openapi3-jakarta-spring-boot-starter</artifactId>
+            <version>${knife4j.version}</version>
+        </dependency>
+        <!--Apache Commons Lang3 工具类库-->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>${commons-lang3.version}</version>
+        </dependency>
+        <!--Spring Security 安全框架-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
+        <!--JWT Token 生成与验证工具-->
+        <dependency>
+            <groupId>com.auth0</groupId>
+            <artifactId>java-jwt</artifactId>
+            <version>${java-jwt.version}</version>
+        </dependency>
+        <!--Spring AOP 支持（用于切面编程，如日志、权限控制）-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-aop</artifactId>
+        </dependency>
+        <!--Apache HttpClient HTTP 客户端工具-->
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>${httpclient.version}</version>
+        </dependency>
+        <!--FastJSON2 JSON 处理库-->
+        <dependency>
+            <groupId>com.alibaba.fastjson2</groupId>
+            <artifactId>fastjson2</artifactId>
+            <version>${fastjson2.version}</version>
+        </dependency>
+        <!--Hutool Java 工具类集合-->
+        <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-all</artifactId>
+            <version>${hutool.version}</version>
+        </dependency>
+        <!--Spring Data Redis Redis 缓存支持-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-redis</artifactId>
+        </dependency>
+
+        <!--dozer Java Bean 映射工具（生成映射代码）-->
+        <dependency>
+            <groupId>net.sf.dozer</groupId>
+            <artifactId>dozer</artifactId>
+            <version>${dozer.version}</version>
+        </dependency>
+        <!--JBCrypt 密码加密工具-->
+        <dependency>
+            <groupId>org.mindrot</groupId>
+            <artifactId>jbcrypt</artifactId>
+            <version>${jbcrypt.version}</version>
+        </dependency>
+        <!--EasyExcel Excel 文件读写工具-->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>easyexcel</artifactId>
+            <version>${easyexcel.version}</version>
+        </dependency>
+        <!--EasyCaptcha 验证码生成工具-->
+        <dependency>
+            <groupId>com.github.whvcse</groupId>
+            <artifactId>easy-captcha</artifactId>
+            <version>${easy-captcha.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>dev.langchain4j</groupId>
+            <artifactId>langchain4j-community-dashscope-spring-boot-starter</artifactId>
+            <version>${langchain4j-community.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>dev.langchain4j</groupId>
+            <artifactId>langchain4j-mcp</artifactId>
+            <version>${langchain4j-mcp.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>dev.langchain4j</groupId>
+            <artifactId>langchain4j-reactor</artifactId>
+            <version>${langchain4j-reactor.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>dev.langchain4j</groupId>
+            <artifactId>langchain4j</artifactId>
+            <version>${langchain4j.version}</version>
+        </dependency>
+
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <release>${java.version}</release>
+                    <annotationProcessorPaths>
+                        <path>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                            <version>${lombok.version}</version>
+                        </path>
+                    </annotationProcessorPaths>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <excludes>
+                        <exclude>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                        </exclude>
+                    </excludes>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>

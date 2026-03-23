@@ -1,0 +1,8 @@
+spring:
+  application:
+    # 服务名称
+    name: billing
+  profiles:
+    active: dev # 选择的配置文件
+server:
+  port: 9526
