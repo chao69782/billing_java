@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fq.modules.record.mapper.RecordMapper">
+    <resultMap id="listResultMap" type="com.fq.modules.record.vo.RecordListVO">
+        <id property="date" column="date"/>
+        <id property="week" column="week"/>
+        <id property="totalIncome" column="total_income"/>
+        <id property="totalExpense" column="total_expense"/>
+        <collection property="list" ofType="com.fq.modules.record.vo.RecordChildrenVO">
+            <id property="id" column="id"/>
+            <id property="categoryName" column="category_name"/>
+            <id property="categoryIcon" column="category_icon"/>
+            <id property="amount" column="amount"/>
+            <id property="recordType" column="record_type"/>
+            <id property="remark" column="remark"/>
+            <id property="createTime" column="create_time"/>
+        </collection>
+
+    </resultMap>
+
+    <select id="list" resultMap="listResultMap">
+        SELECT
+            DATE_FORMAT(r.record_time,'%m-%d') AS DATE,
+            CASE WEEKDAY( r.record_time )
+                WHEN 0 THEN '周一'
+                WHEN 1 THEN '周二'
+                WHEN 2 THEN '周三'
+                WHEN 3 THEN '周四'
+                WHEN 4 THEN '周五'
+                WHEN 5 THEN '周六'
+                WHEN 6 THEN '周日'
+        END AS WEEK,
+            r.id,
+            r.amount,
+            r.record_type,
+            DATE_FORMAT(r.record_time,'%m-%d %h:%m') create_time,
+            CASE
+                WHEN r.remark IS NOT NULL AND r.remark != '' THEN
+                    CONCAT( r.category_name, '-', r.remark )
+                ELSE r.category_name
+        END AS category_name,
+            SUM( CASE WHEN r.record_type = 2 THEN r.amount ELSE 0 END ) OVER ( PARTITION BY r.record_time ) AS total_income,
+            SUM( CASE WHEN r.record_type = 1 THEN r.amount ELSE 0 END ) OVER ( PARTITION BY r.record_time ) AS total_expense,
+            r.category_icon
+        FROM record r
+        WHERE (
+            -- 用户本人的记录
+            r.user_id = #{userId}
+        OR
+        -- 家庭组其他成员的记录（如果用户有家庭）
+        r.user_id IN (
+        SELECT user_id FROM family
+        WHERE group_id = (
+        SELECT group_id FROM family WHERE user_id = #{userId}
+        )
+        AND user_id != #{userId}
+        )
+        )
+        AND r.record_time LIKE CONCAT( #{time}, '%' )
+        ORDER BY r.record_time DESC, r.id DESC
+    </select>
+
+    <delete id="delete">
+        DELETE FROM record WHERE id = #{id} AND user_id = #{userId}
+    </delete>
+
+    <select id="getMonthList" resultType="java.lang.String">
+        SELECT DISTINCT
+            DATE_FORMAT(record_time,'%Y-%m')
+        FROM
+            record
+        WHERE
+            (user_id = #{userId} OR user_id IN (
+                SELECT user_id FROM family
+                WHERE group_id = (
+                    SELECT group_id FROM family WHERE user_id = #{userId}
+                )
+                  AND user_id != #{userId}
+                )
+            )
+        ORDER BY DATE_FORMAT(record_time,'%Y-%m') ASC
+    </select>
+
+    <select id="getYearList" resultType="java.lang.String">
+        SELECT DISTINCT
+            DATE_FORMAT(record_time,'%Y')
+        FROM
+            record
+        WHERE
+            (user_id = #{userId} OR user_id IN (
+                SELECT user_id FROM family
+                WHERE group_id = (
+                    SELECT group_id FROM family WHERE user_id = #{userId}
+                )
+                  AND user_id != #{userId}
+                )
+            )
+        ORDER BY DATE_FORMAT(record_time,'%Y') ASC
+    </select>
+
+    <select id="getRankingList" resultType="com.fq.modules.record.vo.RankingListVO">
+        SELECT
+            SUM( r.amount ) AS amount,
+            r.category_name,
+            r.category_icon,
+            ROUND( SUM( r.amount ) / total.total_amount * 100, 2 ) AS percent
+        FROM
+            record r
+                INNER JOIN ( SELECT SUM( amount ) AS total_amount FROM record WHERE (user_id = #{userId} OR user_id IN (
+                SELECT user_id FROM family
+                WHERE group_id = (
+                    SELECT group_id FROM family WHERE user_id = #{userId}
+                )
+                  AND user_id != #{userId}
+                                                                                        )
+            ) AND record_type = #{recordType} AND record_time LIKE CONCAT( #{time}, '%' ) ) total ON 1 = 1
+        WHERE
+            (r.user_id = #{userId} OR r.user_id IN (
+                SELECT user_id FROM family
+                WHERE group_id = (
+                    SELECT group_id FROM family WHERE user_id = #{userId}
+                )
+                  AND user_id != #{userId}
+                )
+            )
+          AND r.record_type = #{recordType}
+          AND r.record_time LIKE CONCAT( #{time}, '%' )
+        GROUP BY
+            r.category_name
+        ORDER BY
+            SUM( r.amount ) DESC;
+    </select>
+
+    <select id="getMonthIncomeAndExpense" resultType="com.fq.modules.record.vo.MonthIncomeAndExpenseVO">
+        SELECT
+            SUM( CASE WHEN record_type = 2 THEN amount ELSE 0 END ) income,
+            SUM( CASE WHEN record_type = 1 THEN amount ELSE 0 END ) expense
+        FROM
+            record
+        WHERE
+            (user_id = #{userId} OR user_id IN (
+                SELECT user_id FROM family
+                WHERE group_id = (
+                    SELECT group_id FROM family WHERE user_id = #{userId}
+                )
+                  AND user_id != #{userId}
+                )
+            )
+          AND record_time LIKE CONCAT( #{month}, '%' )
+    </select>
+
+    <select id="getMonthBillList" resultType="com.fq.modules.record.vo.BillDetailVO">
+        SELECT
+            SUM( CASE WHEN record_type = 2 THEN amount ELSE 0 END ) AS income,
+            SUM( CASE WHEN record_type = 1 THEN amount ELSE 0 END ) AS expense,
+            LPAD(MONTH(record_time), 2, '0') AS timeStr
+        FROM
+            record
+        WHERE
+            (user_id = #{userId} OR user_id IN (
+                SELECT user_id FROM family
+                WHERE group_id = (
+                    SELECT group_id FROM family WHERE user_id = #{userId}
+                )
+                  AND user_id != #{userId}
+                )
+            )
+          AND record_time LIKE CONCAT( #{year}, '%' )
+        GROUP BY
+            MONTH(record_time)
+    </select>
+
+    <select id="getYearBillList" resultType="com.fq.modules.record.vo.BillDetailVO">
+        SELECT
+            SUM( CASE WHEN record_type = 2 THEN amount ELSE 0 END ) AS income,
+            SUM( CASE WHEN record_type = 1 THEN amount ELSE 0 END ) AS expense,
+            DATE_FORMAT(record_time,'%Y') timeStr
+        FROM
+            record
+        WHERE
+            (user_id = #{userId} OR user_id IN (
+                SELECT user_id FROM family
+                WHERE group_id = (
+                    SELECT group_id FROM family WHERE user_id = #{userId}
+                )
+                  AND user_id != #{userId}
+                )
+            )
+        GROUP BY
+            DATE_FORMAT(record_time,'%Y')
+    </select>
+</mapper>

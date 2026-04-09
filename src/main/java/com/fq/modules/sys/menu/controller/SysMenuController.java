@@ -46,7 +46,7 @@ public class SysMenuController extends BaseController {
         return super.success(list);
     }
 
-    @PreAuthorize("hasAnyAuthority('sys:menu:add', 'sys:menu:update')")
+    @PreAuthorize("@ss.hasAnyPermi('sys:menu:add', 'sys:menu:update')")
     @Operation(summary = "增改--菜单信息")
     @PostMapping(value = "/save")
     public ApiRest<Void> save(@Validated @RequestBody SysMenuDTO reqDTO) {
@@ -54,7 +54,7 @@ public class SysMenuController extends BaseController {
         return super.success();
     }
 
-    @PreAuthorize("hasAuthority('sys:menu:delete')")
+    @PreAuthorize("@ss.hasPermi('sys:menu:delete')")
     @Operation(summary = "批量删除--菜单信息")
     @DeleteMapping(value = "/delete")
     public ApiRest<Void> edit(@RequestParam("ids") List<Long> ids) {
@@ -83,14 +83,14 @@ public class SysMenuController extends BaseController {
         return super.success(list);
     }
 
-    @PreAuthorize("hasAuthority('sys:menu:sort')")
+    @PreAuthorize("@ss.hasPermi('sys:menu:sort')")
     @Operation(summary = "操作--菜单排序")
     @PutMapping(value = "/sort")
     public ApiRest<Void> sort(@RequestBody ListSortReqDTO reqDTO) {
         baseService.sort(reqDTO.getId(), reqDTO.getSort());
         return super.success();
     }
-    @PreAuthorize("hasAuthority('sys:menu:state')")
+    @PreAuthorize("@ss.hasPermi('sys:menu:state')")
     @Operation(summary = "操作--禁用启用菜单")
     @PutMapping(value = "/change-state")
     public ApiRest<Void> changeState(@Validated @RequestBody BaseChangeStateDTO<Long> reqDTO) {

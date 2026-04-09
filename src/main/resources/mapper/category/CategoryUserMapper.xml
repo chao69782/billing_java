@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fq.modules.category.mapper.CategoryUserMapper">
+
+    <delete id="delete">
+        DELETE FROM category_user WHERE user_id = #{userId} AND id = #{id}
+    </delete>
+    <select id="querySortValue" resultType="java.lang.Integer">
+        SELECT IFNULL(sort,0) FROM category_user WHERE user_id = #{userId} ORDER BY sort DESC LIMIT 1
+    </select>
+</mapper>

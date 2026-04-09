@@ -8,7 +8,7 @@ import com.fq.ability.redis.constant.RedisConstant;
 import com.fq.api.api.ApiError;
 import com.fq.api.api.ApiRest;
 import com.fq.config.properties.SecurityProperties;
-import com.fq.security.service.UserDetailsServiceImpl;
+import com.fq.security.service.impl.UserDetailsServiceImpl;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fq.modules.category.mapper.CategoryMapper">
+
+    <select id="listByCategoryType" resultType="com.fq.modules.category.entity.Category">
+        SELECT
+            cu.id,
+            cu.category_name,
+            cu.category_icon,
+            cu.category_type
+        FROM
+            category_user cu
+        WHERE cu.user_id = #{userId} AND cu.category_type = #{categoryType} ORDER BY cu.sort ASC
+    </select>
+    <select id="listByUserId" resultType="com.fq.modules.category.entity.Category">
+        SELECT
+            cu.id,
+            cu.category_name,
+            cu.category_icon,
+            cu.category_type
+        FROM
+            category_user cu
+        WHERE cu.user_id = #{userId} ORDER BY cu.sort ASC
+    </select>
+</mapper>

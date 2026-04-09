@@ -29,7 +29,7 @@ public class SysLogController extends BaseController {
     @Autowired
     private SysLogService baseService;
 
-    @PreAuthorize("hasAuthority('sys:log:list')")
+    @PreAuthorize("@ss.hasPermi('sys:log:list')")
     @Operation(summary = "分页--查询日志列表")
     @GetMapping(value = "/paging")
     public ApiRest<IPage<SysLogVO>> paging(@ModelAttribute QuerySysLogDTO reqDTO) {

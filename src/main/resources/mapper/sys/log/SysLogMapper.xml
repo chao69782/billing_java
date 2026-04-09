@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fq.modules.sys.log.mapper.SysLogMapper">
+
+    <select id="queryLogListByParams" resultType="com.fq.modules.sys.log.vo.SysLogVO">
+        SELECT
+            title,
+            create_time,
+            operate_param AS params
+        FROM
+            sys_log
+        WHERE
+            `status` = 200
+          AND ( MATCH ( operate_param ) AGAINST ( #{params} ) OR MATCH ( json_result ) AGAINST ( #{params} ) )
+        ORDER BY
+            create_time DESC
+    </select>
+
+    <select id="paging" resultType="com.fq.modules.sys.log.vo.SysLogVO">
+        SELECT
+        sl.id,
+        sl.title,
+        sl.request_url,
+        sl.operate_param AS params,
+        sl.json_result,
+        sl.status,
+        sl.error_msg,
+        sl.response_time,
+        sl.platform,
+        sl.create_time,
+        su.mobile operator
+        FROM
+        sys_log sl
+        LEFT JOIN sys_user su on su.id = sl.user_id
+        <where>
+            <if test="query.operator != null and query.operator != ''">
+                AND su.mobile = #{query.operator}
+            </if>
+            <if test="query.title != null and query.title != ''">
+                AND sl.title LIKE CONCAT('%',#{query.title},'%')
+            </if>
+            <if test="query.startTime != null and query.startTime != '' and query.endTime != null and query.endTime != ''">
+                AND sl.create_time BETWEEN #{query.startTime} AND #{query.endTime}
+            </if>
+        </where>
+    </select>
+</mapper>

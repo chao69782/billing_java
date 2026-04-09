@@ -45,7 +45,7 @@ public class SysRoleController extends BaseController {
     /**
      * 分页查询--角色列表
      */
-    @PreAuthorize("hasAuthority('sys:role:list')")
+    @PreAuthorize("@ss.hasPermi('sys:role:list')")
     @Operation(summary = "分页查询--角色列表")
     @GetMapping(value = "/paging")
     public ApiRest<IPage<SysRoleDTO>> paging(@Validated @ModelAttribute QueryRoleDTO reqDTO) {
@@ -58,7 +58,7 @@ public class SysRoleController extends BaseController {
     /**
      * 增改--角色
      */
-    @PreAuthorize("hasAnyAuthority('sys:role:save', 'sys:role:update')")
+    @PreAuthorize("@ss.hasAnyPermi('sys:role:save', 'sys:role:update')")
     @Operation(summary = "增改--角色")
     @PostMapping(value = "/save")
     public ApiRest<String> save(@Validated @RequestBody SysRoleDTO reqDTO) {
@@ -69,7 +69,7 @@ public class SysRoleController extends BaseController {
     /**
      * 删除--角色
      */
-    @PreAuthorize("hasAuthority('sys:role:delete')")
+    @PreAuthorize("@ss.hasPermi('sys:role:delete')")
     @Operation(summary = "删除--角色")
     @DeleteMapping(value = "/delete")
     public ApiRest<Void> delete(@RequestParam(value = "id") String id) {
@@ -93,7 +93,7 @@ public class SysRoleController extends BaseController {
     /**
      * 查询--角色菜单授权列表
      */
-    @PreAuthorize("hasAuthority('sys:role:grant')")
+    @PreAuthorize("@ss.hasPermi('sys:role:grant')")
     @Operation(summary = "查询--角色菜单授权列表")
     @GetMapping(value = "/list-menus")
     public ApiRest<List<Long>> listMenus(@RequestParam(value = "roleId") String roleId) {
@@ -105,7 +105,7 @@ public class SysRoleController extends BaseController {
     /**
      * 增改--角色菜单授权
      */
-    @PreAuthorize("hasAuthority('sys:role:grant')")
+    @PreAuthorize("@ss.hasPermi('sys:role:grant')")
     @Operation(summary = "增改--角色菜单授权")
     @PostMapping(value = "/save-menus")
     public ApiRest<Void> saveMenus(@Validated @RequestBody SysRoleMenuReqDTO reqDTO) {
@@ -117,7 +117,7 @@ public class SysRoleController extends BaseController {
     /**
      * 启用或禁用角色
      */
-    @PreAuthorize("hasAuthority('sys:role:state')")
+    @PreAuthorize("@ss.hasPermi('sys:role:state')")
     @Operation(summary = "更新--启用或禁用角色")
     @PutMapping(value = "/change-state")
     public ApiRest<Void> changeState(@Validated @RequestBody BaseChangeStateDTO<String> reqDTO) {

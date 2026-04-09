@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fq.modules.sys.role.mapper.SysRoleMapper">
+    <select id="checkRoleUserUse" resultType="boolean">
+        SELECT COUNT(1) > 0
+        FROM sys_user_role
+        WHERE role_id = #{roleId} limit 1
+    </select>
+
+    <select id="paging" resultType="com.fq.modules.sys.role.dto.SysRoleDTO">
+        SELECT
+        r.id,
+        r.role_name,
+        r.remark,
+        r.role_state,
+        r.create_time,
+        r.update_time,
+        r.data_flag
+        FROM sys_role r
+        <where>
+            AND r.id != 'ordinary_user'
+            <if test="query != null">
+                <if test="query.roleName != null and query.roleName != ''">
+                    AND r.role_name LIKE CONCAT('%', #{query.roleName}, '%')
+                </if>
+                <if test="query.roleState != null">
+                    AND r.role_state = #{query.roleState}
+                </if>
+                <if test="query.startTime != null and query.startTime != '' and query.endTime != null and query.endTime != ''">
+                    AND r.create_time BETWEEN #{query.startTime} AND #{query.endTime}
+                </if>
+            </if>
+        </where>
+    </select>
+
+    <delete id="delete">
+        DELETE
+        sr,
+            srm
+        FROM
+          sys_role sr
+          LEFT JOIN sys_role_menu srm ON sr.id = srm.role_id
+        WHERE
+          sr.id = #{id}
+    </delete>
+</mapper>
