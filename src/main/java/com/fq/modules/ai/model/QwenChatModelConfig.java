@@ -2,8 +2,6 @@ package com.fq.modules.ai.model;
 
 import dev.langchain4j.community.model.dashscope.QwenChatModel;
 import dev.langchain4j.community.model.dashscope.QwenStreamingChatModel;
-import dev.langchain4j.model.chat.ChatModel;
-import dev.langchain4j.model.chat.StreamingChatModel;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -26,7 +24,7 @@ public class QwenChatModelConfig {
 
     // 大语言模型
     @Bean
-    public ChatModel myQwenChatModel(){
+    public QwenChatModel myQwenChatModel(){
         return QwenChatModel.builder()
                 .apiKey(chatApiKey)
                 .modelName(chatModelName)
@@ -34,7 +32,7 @@ public class QwenChatModelConfig {
     }
 
     @Bean
-    public StreamingChatModel myQwenStreamingChatModel(){
+    public QwenStreamingChatModel myQwenStreamingChatModel(){
         return QwenStreamingChatModel.builder()
                 .apiKey(chatApiKey)
                 .modelName(chatModelName)

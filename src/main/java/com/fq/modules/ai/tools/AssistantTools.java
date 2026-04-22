@@ -14,7 +14,6 @@ import com.fq.utils.TimeUtil;
 import dev.langchain4j.agent.tool.P;
 import dev.langchain4j.agent.tool.Tool;
 import dev.langchain4j.agent.tool.ToolMemoryId;
-import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -64,7 +63,7 @@ public class AssistantTools {
             @P("金额") Double amount,
             @P("分类名称（例如'餐饮'、'工资'）") String categoryName,
             @P("备注/描述") String remark,
-            @P("时间，格式'yyyy-MM-dd'。如未提供用当前时间") String recordTime,
+            @P("时间，格式'yyyy-MM-dd'。如未提供用当前系统时间") String recordTime,
             @P("类型：1支出，2收入") Integer recordType,
             @P("图标：icon-licai") String categoryIcon,
             @ToolMemoryId Long userId

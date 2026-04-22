@@ -1,10 +1,10 @@
 package com.fq.modules.ai.config;
 
 import com.fq.modules.ai.tools.AssistantTools;
+import dev.langchain4j.community.model.dashscope.QwenChatModel;
+import dev.langchain4j.community.model.dashscope.QwenStreamingChatModel;
 import dev.langchain4j.memory.chat.ChatMemoryProvider;
 import dev.langchain4j.memory.chat.MessageWindowChatMemory;
-import dev.langchain4j.model.chat.ChatModel;
-import dev.langchain4j.model.chat.StreamingChatModel;
 import dev.langchain4j.service.AiServices;
 import dev.langchain4j.service.MemoryId;
 import dev.langchain4j.service.SystemMessage;
@@ -24,9 +24,9 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class AssistantConfig {
     @Resource
-    private ChatModel myQwenChatModel;
+    private QwenChatModel myQwenChatModel;
     @Resource
-    private StreamingChatModel myQwenStreamingChatModel;
+    private QwenStreamingChatModel myQwenStreamingChatModel;
     @Resource
     private AssistantTools assistantTools;
 
@@ -47,7 +47,7 @@ public class AssistantConfig {
         ChatMemoryProvider memoryProvider = memoryId -> MessageWindowChatMemory
                 .builder()
                 .id(memoryId)
-                .maxMessages(5)
+                .maxMessages(30)
                 .chatMemoryStore(store)
                 .build();
 
